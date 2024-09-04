@@ -1,0 +1,51 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@inject Umbraco.Cms.Web.Common.UmbracoHelper UmbracoHelper
+
+@{
+    Layout = null;
+    //Hämtar ut rooten
+    var rootContents = UmbracoHelper.ContentAtRoot();
+    //söker efter settings page
+    var settings = rootContents?.FirstOrDefault(x => x.ContentType.Alias == "settingsPage") ?? null;
+    //sätter siteName
+    var siteName = settings?.Value<string>("siteName") ?? "Onatrix";
+        //sätter siteTagline
+    var siteTagline = settings?.Value<string>("siteTagline") ?? "Financial Solutions";
+    var pageThumbnail = settings?.Value<IPublishedContent>("siteThumbnail")?.Url() ?? "";
+    //bygger upp PageTitle
+   var pageTitle = !string.IsNullOrEmpty(ViewBag?.Title) ? $"{ViewBag.Title} | {siteName} - {siteTagline}" : $"{siteName} - {siteTagline}";
+
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://kit.fontawesome.com/a576612222.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="icon" href="@pageThumbnail" type="">
+    <title>@pageTitle</title>
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            @await Html.PartialAsync("partials/static/topbar.cshtml")
+            <!--Navigation-->
+            @await Html.PartialAsync("partials/static/header")
+
+
+        </header>
+        <main>
+            @RenderBody()
+        </main>
+        <footer class="bg-dark">
+            @await Html.PartialAsync("partials/static/footer")
+        </footer>
+    </div>
+
+
+    <!--script?-->
+    <script src="/scripts/main.js"></script>
+</body>
+</html>

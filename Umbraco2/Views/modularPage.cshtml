@@ -1,0 +1,31 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ModularPage>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+
+
+@{
+	Layout = "mainLayout.cshtml";
+    //@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<Umbraco.Cms.Web.Common.PublishedModels.ModularPage>
+    //@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ModularPage>
+    //@await Html.GetBlockGridHtmlAsync(Model!.Layout)
+    
+	    // Hämta Block Grid-egenskapen från ModularPage
+    var blockGridLayout = Model.Value<Umbraco.Cms.Core.Models.Blocks.BlockGridModel>("layout"); // 'layout' är alias för Block Grid-egenskapen
+	ViewBag.Title = Model?.Value("pageTitle") ?? null;
+}
+
+
+
+
+<h1>@Model!.Value("pageTitle")</h1>
+@if (blockGridLayout != null)
+{
+    // Rendera Block Grid-innehållet
+    @await Html.GetBlockGridHtmlAsync(blockGridLayout)
+}
+else
+{
+    <p>No layout defined for this page.</p>
+}
+
+
